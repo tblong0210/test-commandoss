@@ -1,6 +1,7 @@
 import React from 'react'
 import { Listing } from '../types'
 import Card from '@mui/material/Card'
+import { Avatar, Button, Chip } from '@mui/material'
 
 interface ListingCardProps {
   listing: Listing
@@ -10,19 +11,42 @@ interface ListingCardProps {
 
 const ListingCard: React.FC<ListingCardProps> = ({ listing, onProposeTrade, currentAccount }) => {
   return (
-    <Card sx={{ minWidth: 275 }}>
-      <div className='listing-header'>
-        <h3>{listing.title}</h3>
-        <span className={`listing-type ${listing.type}`}>{listing.type}</span>
+    <Card
+      sx={{
+        maxWidth: 275,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 2,
+        textAlign: 'center'
+      }}
+    >
+      <div className='flex flex-col items-center'>
+        <Avatar sx={{ width: 42, height: 42 }} />
+        <Chip
+          className='!h-fit w-fit !p-1 !rounded-[4px] !my-2'
+          label={listing.type}
+          color='primary'
+          variant='outlined'
+        />
+        <div className='mt-2'>
+          <h1 className='text-2xl font-bold'>{listing.ownerName}</h1>
+          <h2 className='text-xs font-semibold'>{listing.title}</h2>
+        </div>
+        <div className='mt-4 text-xs'>
+          {listing.description.length > 50 ? `${listing.description.substring(0, 100)}...` : listing.description}
+        </div>
       </div>
-      <p className='listing-description'>{listing.description}</p>
-      <div className='listing-footer'>
-        <span>By: {listing.ownerName}</span>
-        {currentAccount && listing.owner !== currentAccount.address && (
-          <button onClick={() => onProposeTrade(listing)} className='action-button'>
-            Propose Trade
-          </button>
-        )}
+      <div className='mt-5'>
+        <Button
+          disabled={currentAccount === null}
+          variant='contained'
+          size='small'
+          onClick={() => onProposeTrade(listing)}
+        >
+          Propose Trade
+        </Button>
       </div>
     </Card>
   )
