@@ -1,11 +1,12 @@
 {
-  "name": "macost",
+  "name": "skillswap",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "deploy": "tsx scripts/deploy.ts",
     "lint": "eslint .",
     "preview": "vite preview",
     "lint:fix": "eslint . --fix",
@@ -13,8 +14,24 @@
     "prettier:fix": "prettier --write \"src/**/(*.tsx|*.ts|*.css|*.scss)\""
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@fontsource/roboto": "^5.2.5",
+    "@mui/icons-material": "^7.1.0",
+    "@mui/material": "^7.1.0",
+    "@mui/styled-engine": "^7.1.0",
+    "@mui/styled-engine-sc": "^7.1.0",
+    "@mysten/dapp-kit": "^0.16.5",
+    "@mysten/sui": "^1.30.1",
+    "@mysten/sui.js": "^0.54.1",
+    "@tailwindcss/vite": "^4.1.8",
+    "@tanstack/react-query": "^5.79.0",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.4",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "styled-components": "^6.1.18",
+    "tailwindcss": "^4.1.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
