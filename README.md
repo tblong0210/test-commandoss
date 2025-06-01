@@ -55,7 +55,7 @@ npm install && npm run dev
 All barter transactions are recorded using a custom Move smart contract deployed on SUI Devnet.
 
 ```bash
-cd smart-contracts
+cd contracts
 sui move build
 sui client publish --gas-budget 100000000
 ```
