@@ -26,10 +26,8 @@ A web platform that allows people in Ho Chi Minh City (HCMC) to offer skills or 
 | Layer       | Technology      |
 |-------------|-----------------|
 | Frontend    | React + Vite + TailwindCSS |
-| Backend     | Express.js + Node.js |
 | Blockchain  | [SUI](https://sui.io) + Move |
 | Wallet      | [SUI Wallet Kit](https://docs.sui.io/build/wallets) |
-| Database    | MongoDB (for off-chain listings) |
 
 ---
 
