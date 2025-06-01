@@ -1,0 +1,31 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Listing {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  type        String // use enum if needed
+  owner       String
+  ownerName   String
+  status      String
+  createdAt   DateTime @default(now())
+}
+
+model Trade {
+  id          String   @id @default(cuid())
+  proposer    String
+  recipient   String
+  description String
+  status      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

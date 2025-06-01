@@ -1,10 +1,6 @@
 import React from 'react'
 import { clsx } from '../utils/helpers'
-
-interface TabNavigationProps {
-  activeTab: string
-  setActiveTab: (tab: string) => void
-}
+import { useNavigate } from 'react-router-dom'
 
 interface CustomBtnHeaderProps {
   text: string
@@ -24,20 +20,23 @@ const CustomBtnHeader: React.FC<CustomBtnHeaderProps> = ({ text, onClick, classN
 }
 
 const Tabs = [
-  { name: 'Listings', value: 'listings' },
-  { name: 'Trades', value: 'trades' },
-  { name: 'Create Listing', value: 'create' }
+  { name: 'Listings', url: '/' },
+  { name: 'Trades', url: '/trades' },
+  { name: 'Create Listing', url: '/create' }
 ]
 
-const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, setActiveTab }) => {
+const TabNavigation: React.FC = () => {
+  const navigate = useNavigate()
+  const currentPath = window.location.pathname
+
   return (
     <div className='flex gap-3'>
       {Tabs.map((tab) => (
         <CustomBtnHeader
-          key={tab.value}
+          key={tab.name}
           text={tab.name}
-          onClick={() => setActiveTab(tab.value)}
-          className={activeTab !== tab.value ? 'text-white' : ' text-blue-500'}
+          onClick={() => navigate(tab.url)}
+          className={currentPath !== tab.url ? 'text-white' : ' text-blue-500'}
         />
       ))}
     </div>

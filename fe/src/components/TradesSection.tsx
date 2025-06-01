@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import TradeCard from './TradeCard'
 import { Trade } from '../types'
 
@@ -10,7 +10,7 @@ interface TradesSectionProps {
   acceptTrade: (tradeId: string) => void
   completeTrade: (tradeId: string) => void
   cancelTrade: (tradeId: string) => void
-  getTradeStatusText: (status: number) => string
+  getTradeStatusText: (status: number) => ReactNode
 }
 
 const TradesSection: React.FC<TradesSectionProps> = ({
@@ -35,8 +35,6 @@ const TradesSection: React.FC<TradesSectionProps> = ({
 
   return (
     <div className='trades-section'>
-      <h2>Your Trades</h2>
-
       {!currentAccount ? (
         <p>Please connect your wallet to view trades.</p>
       ) : loading ? (
@@ -44,7 +42,7 @@ const TradesSection: React.FC<TradesSectionProps> = ({
       ) : trades.length === 0 ? (
         <p>No trades found.</p>
       ) : (
-        <div className='trades-list'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
           {trades.map((trade) => (
             <TradeCard
               key={trade.id}

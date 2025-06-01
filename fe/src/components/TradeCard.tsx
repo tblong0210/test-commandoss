@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Trade } from '../types'
+import { Card } from '@mui/material'
 
 interface TradeCardProps {
   trade: Trade
@@ -9,7 +10,7 @@ interface TradeCardProps {
   onComplete: (tradeId: string) => void
   onCancel: (tradeId: string) => void
   txnInProgress: boolean
-  getTradeStatusText: (status: number) => string
+  getTradeStatusText: (status: number) => ReactNode
 }
 
 const TradeCard: React.FC<TradeCardProps> = ({
@@ -22,15 +23,25 @@ const TradeCard: React.FC<TradeCardProps> = ({
   txnInProgress,
   getTradeStatusText
 }) => {
+  console.log(`Rendering TradeCard for trade ID:`, trade)
+
   return (
-    <div className='trade-card'>
-      <div className='trade-header'>
-        <h3>
+    <Card
+      sx={{
+        maxWidth: 600,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: 2
+      }}
+    >
+      <div className='flex justify-between'>
+        <h3 className='text-xl font-bold'>
           Trade #{trade.id.substring(0, 6)}...{trade.id.substring(trade.id.length - 4)}
         </h3>
-        <span className={`trade-status status-${trade.status}`}>{getTradeStatusText(trade.status)}</span>
+        <span>{getTradeStatusText(trade.status)}</span>
       </div>
-      <p className='trade-description'>{trade.description}</p>
+      <p className='py-5 text-sm'>{trade.description}</p>
       <div className='trade-details'>
         <div>
           <strong>Proposer:</strong>{' '}
@@ -62,7 +73,7 @@ const TradeCard: React.FC<TradeCardProps> = ({
           </button>
         )}
       </div>
-    </div>
+    </Card>
   )
 }
 

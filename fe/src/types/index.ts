@@ -22,6 +22,7 @@ export interface Trade {
 }
 
 export interface NewListing {
+  name: string
   title: string
   description: string
   type: 'skill' | 'item'
