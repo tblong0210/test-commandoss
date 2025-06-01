@@ -1,4 +1,5 @@
 import './index.css'
+import '@mysten/dapp-kit/dist/index.css'
 
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'

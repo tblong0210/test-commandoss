@@ -1,14 +1,14 @@
 import React, { ReactNode } from 'react'
+
+import { Button, Card } from '@mui/material'
+
 import { Trade } from '../types'
-import { Card } from '@mui/material'
 
 interface TradeCardProps {
   trade: Trade
   isProposer: boolean
   isRecipient: boolean
-  onAccept: (tradeId: string) => void
-  onComplete: (tradeId: string) => void
-  onCancel: (tradeId: string) => void
+  onUpdateStatusTrade: (tradeId: string, status: number) => void
   txnInProgress: boolean
   getTradeStatusText: (status: number) => ReactNode
 }
@@ -17,14 +17,10 @@ const TradeCard: React.FC<TradeCardProps> = ({
   trade,
   isProposer,
   isRecipient,
-  onAccept,
-  onComplete,
-  onCancel,
+  onUpdateStatusTrade,
   txnInProgress,
   getTradeStatusText
 }) => {
-  console.log(`Rendering TradeCard for trade ID:`, trade)
-
   return (
     <Card
       sx={{
@@ -44,13 +40,13 @@ const TradeCard: React.FC<TradeCardProps> = ({
       <p className='py-5 text-sm'>{trade.description}</p>
       <div className='trade-details'>
         <div>
-          <strong>Proposer:</strong>{' '}
+          <strong>Proposer:</strong>
           {isProposer
             ? 'You'
             : `${trade.proposer.substring(0, 6)}...${trade.proposer.substring(trade.proposer.length - 4)}`}
         </div>
         <div>
-          <strong>Recipient:</strong>{' '}
+          <strong>Recipient:</strong>
           {isRecipient
             ? 'You'
             : `${trade.recipient.substring(0, 6)}...${trade.recipient.substring(trade.recipient.length - 4)}`}
@@ -58,19 +54,40 @@ const TradeCard: React.FC<TradeCardProps> = ({
       </div>
       <div className='trade-actions'>
         {trade.status === 0 && isRecipient && (
-          <button onClick={() => onAccept(trade.id)} disabled={txnInProgress} className='action-button accept'>
+          <Button
+            type='submit'
+            variant='contained'
+            color='primary'
+            disabled={txnInProgress}
+            sx={{ marginTop: 2, width: '100%' }}
+            onClick={() => onUpdateStatusTrade(trade.id, 1)}
+          >
             {txnInProgress ? 'Processing...' : 'Accept Trade'}
-          </button>
+          </Button>
         )}
         {trade.status === 1 && (isProposer || isRecipient) && (
-          <button onClick={() => onComplete(trade.id)} disabled={txnInProgress} className='action-button complete'>
+          <Button
+            type='submit'
+            variant='contained'
+            color='primary'
+            disabled={txnInProgress}
+            sx={{ marginTop: 3, width: '100%' }}
+            onClick={() => onUpdateStatusTrade(trade.id, 2)}
+          >
             {txnInProgress ? 'Processing...' : 'Complete Trade'}
-          </button>
+          </Button>
         )}
         {(trade.status === 0 || trade.status === 1) && (isProposer || isRecipient) && (
-          <button onClick={() => onCancel(trade.id)} disabled={txnInProgress} className='action-button cancel'>
+          <Button
+            type='submit'
+            variant='contained'
+            color='inherit'
+            disabled={txnInProgress}
+            sx={{ marginTop: 1, width: '100%' }}
+            onClick={() => onUpdateStatusTrade(trade.id, 3)}
+          >
             {txnInProgress ? 'Processing...' : 'Cancel Trade'}
-          </button>
+          </Button>
         )}
       </div>
     </Card>

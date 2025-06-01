@@ -7,9 +7,7 @@ interface TradesSectionProps {
   loading: boolean
   currentAccount: { address: string } | null
   txnInProgress: boolean
-  acceptTrade: (tradeId: string) => void
-  completeTrade: (tradeId: string) => void
-  cancelTrade: (tradeId: string) => void
+  updateStatusTrade: (tradeId: string, status: number) => void
   getTradeStatusText: (status: number) => ReactNode
 }
 
@@ -18,9 +16,7 @@ const TradesSection: React.FC<TradesSectionProps> = ({
   loading,
   currentAccount,
   txnInProgress,
-  acceptTrade,
-  completeTrade,
-  cancelTrade,
+  updateStatusTrade,
   getTradeStatusText
 }) => {
   // Helper function to check if user is the proposer of a trade
@@ -34,7 +30,7 @@ const TradesSection: React.FC<TradesSectionProps> = ({
   }
 
   return (
-    <div className='trades-section'>
+    <div className='p-5'>
       {!currentAccount ? (
         <p>Please connect your wallet to view trades.</p>
       ) : loading ? (
@@ -49,9 +45,7 @@ const TradesSection: React.FC<TradesSectionProps> = ({
               trade={trade}
               isProposer={isProposer(trade)}
               isRecipient={isRecipient(trade)}
-              onAccept={acceptTrade}
-              onComplete={completeTrade}
-              onCancel={cancelTrade}
+              onUpdateStatusTrade={updateStatusTrade}
               txnInProgress={txnInProgress}
               getTradeStatusText={getTradeStatusText}
             />

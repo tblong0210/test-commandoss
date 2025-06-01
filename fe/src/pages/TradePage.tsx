@@ -1,24 +1,14 @@
-import React, { JSX, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 
 import { useCurrentAccount } from '@mysten/dapp-kit'
 
 import TradesSection from '../components/TradesSection'
-import { Trade } from '../types'
-
-const mockTrades: Trade[] = [
-  {
-    id: '0x123...789',
-    proposer: '0x123...456',
-    recipient: '0x789...012',
-    description: 'I want to trade my Vietnamese lessons for laptop repair',
-    status: 0, // 0: proposed, 1: accepted, 2: completed, 3: cancelled
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  }
-]
+import { useTradeActions, useTrades } from '../stores/store'
 
 const TradePage: React.FC = () => {
   const currentAccount = useCurrentAccount()
+  const tradesData = useTrades()
+  const { updateTradeStatus } = useTradeActions()
 
   // Helper function to get trade status text
   const getTradeStatusText = (status: number): ReactNode => {
@@ -36,20 +26,22 @@ const TradePage: React.FC = () => {
     }
   }
 
+  const handleChangeStatus = (tradeId: string, status: number): void => {
+    if (!currentAccount) {
+      console.error('No current account found')
+      return
+    }
+    updateTradeStatus(tradeId, status)
+  }
+
   return (
     <div>
       <TradesSection
-        trades={mockTrades}
-        loading={true}
+        trades={tradesData}
+        loading={false}
         currentAccount={currentAccount}
         txnInProgress={false}
-        acceptTrade={function (tradeId: string): void {}}
-        completeTrade={function (tradeId: string): void {
-          throw new Error('Function not implemented.')
-        }}
-        cancelTrade={function (tradeId: string): void {
-          throw new Error('Function not implemented.')
-        }}
+        updateStatusTrade={handleChangeStatus}
         getTradeStatusText={getTradeStatusText}
       />
     </div>

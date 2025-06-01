@@ -13,11 +13,13 @@ const CreateListingForm: React.FC<CreateListingFormProps> = ({ createListing, lo
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm<NewListing>()
 
   const onSubmit: SubmitHandler<NewListing> = (data) => {
     createListing(data)
+    reset()
   }
 
   return (
@@ -29,7 +31,7 @@ const CreateListingForm: React.FC<CreateListingFormProps> = ({ createListing, lo
     >
       <h2 className='text-center text-2xl font-bold mb-10'>Create New Listing</h2>
 
-      {currentAccount ? (
+      {!currentAccount ? (
         <p>Please connect your wallet to create listings.</p>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -85,11 +87,11 @@ const CreateListingForm: React.FC<CreateListingFormProps> = ({ createListing, lo
                 id='type-select'
                 size='small'
                 label='Type'
-                defaultValue={0}
+                defaultValue='skill'
                 {...register('type', { required: true })}
               >
-                <MenuItem value={0}>Skill</MenuItem>
-                <MenuItem value={1}>Item</MenuItem>
+                <MenuItem value='skill'>Skill</MenuItem>
+                <MenuItem value='item'>Item</MenuItem>
               </Select>
             </FormControl>
           </div>

@@ -31,11 +31,11 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onProposeTrade, curr
           variant='outlined'
         />
         <div className='mt-2'>
-          <h1 className='text-2xl font-bold'>{listing.ownerName}</h1>
+          <h1>{listing.ownerName}</h1>
           <h2 className='text-xs font-semibold'>{listing.title}</h2>
         </div>
         <div className='mt-4 text-xs'>
-          {listing.description.length > 50 ? `${listing.description.substring(0, 100)}...` : listing.description}
+          {listing.description.length > 100 ? `${listing.description.substring(0, 100)}...` : listing.description}
         </div>
       </div>
       <div className='mt-5'>

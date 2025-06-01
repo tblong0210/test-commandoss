@@ -1,107 +1,62 @@
+import React from 'react'
+
 import { useCurrentAccount } from '@mysten/dapp-kit'
 
 import ListingsSection from '../components/ListingsSection'
+import ProposeTradeForm from '../components/ProposeTradeForm'
+import { useNotificationStore } from '../stores/notification-store'
+import { useListings, useTradeActions } from '../stores/store'
 import { Listing } from '../types'
-
-const mockListings: Listing[] = [
-  {
-    id: '1',
-    title: 'Learn React Basics',
-    description: 'A comprehensive guide to get started with React.',
-    type: 'skill',
-    owner: '0x123',
-    ownerName: 'Alice',
-    status: 'available',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: '2',
-    title: 'Advanced JavaScript Techniques',
-    description: 'Deep dive into JavaScript for experienced developers.',
-    type: 'skill',
-    owner: '0x456',
-    ownerName: 'Bob',
-    status: 'available',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: '3',
-    title: 'Advanced JavaScript Techniques',
-    description: 'Deep dive into JavaScript for experienced developers.',
-    type: 'skill',
-    owner: '0x456',
-    ownerName: 'Bob',
-    status: 'available',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: '4',
-    title: 'Python for Data Science',
-    description: 'Learn how to use Python for data analysis and visualization.',
-    type: 'skill',
-    owner: '0x789',
-    ownerName: 'Charlie',
-    status: 'available',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: '5',
-    title: 'Blockchain Development',
-    description: 'Introduction to blockchain technology and smart contracts.',
-    type: 'skill',
-    owner: '0xabc',
-    ownerName: 'Dave',
-    status: 'available',
-    createdAt: new Date().toISOString()
-  }
-]
+import { clsx } from '../utils/helpers'
 
 const ListingPage = () => {
   const currentAccount = useCurrentAccount()
+  const listingsData = useListings()
+  const { addNotification } = useNotificationStore()
+  const { addTrade } = useTradeActions()
 
-  const handleProposeTrade = (listing: Listing) => {
-    console.log('Propose trade for listing:', listing)
-    // Implement the logic to handle proposing a trade
+  const [isLoading] = React.useState(false)
+  const [selectedListing, setSelectedListing] = React.useState<Listing | null>(null)
+
+  const handleOpenProposeTrade = (lst: Listing) => {
+    if (!currentAccount) {
+      console.error('No current account found')
+      return
+    }
+    setSelectedListing(lst)
+  }
+
+  const handleProposeTrade = (data: { description: string }) => {
+    handleCancelProposal()
+    addTrade({
+      proposer: currentAccount?.address || '',
+      recipient: selectedListing?.owner || '',
+      description: data.description
+    })
+    addNotification('Trade proposal sent successfully!', 'success')
+  }
+
+  const handleCancelProposal = () => {
+    setSelectedListing(null)
   }
   return (
     <div>
-      <div className='flex justify-center mt-10'>
+      <div className={clsx(listingsData.length > 5 ? 'flex justify-center' : '', 'mt-5')}>
         <ListingsSection
-          listings={mockListings}
+          listings={listingsData}
           loading={false}
           currentAccount={currentAccount}
-          onProposeTrade={handleProposeTrade}
+          onProposeTrade={handleOpenProposeTrade}
         />
       </div>
-
-      {/* {activeTab === 'trades' && (
-          <TradesSection
-            trades={trades}
-            loading={loading}
-            currentAccount={currentAccount}
-            txnInProgress={txnInProgress}
-            acceptTrade={acceptTrade}
-            completeTrade={completeTrade}
-            cancelTrade={cancelTrade}
-            getTradeStatusText={getTradeStatusText}
-          />
-        )}
-
-        {activeTab === 'create' && (
-          <CreateListingForm createListing={createListing} loading={loading} currentAccount={currentAccount} />
-        )}
-
-        {activeTab === 'propose' && selectedListing && (
-          <ProposeTradeForm
-            selectedListing={selectedListing}
-            tradeDescription={tradeDescription}
-            setTradeDescription={setTradeDescription}
-            proposeTrade={proposeTrade}
-            txnInProgress={txnInProgress}
-            onCancel={handleCancelProposal}
-          />
-        )}
-      </div> */}
+      {selectedListing && (
+        <ProposeTradeForm
+          selectedListing={selectedListing}
+          proposeTrade={handleProposeTrade}
+          loading={isLoading}
+          onCancel={handleCancelProposal}
+        />
+      )}
     </div>
   )
 }
